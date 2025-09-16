@@ -1,0 +1,34 @@
+<!-- payment_successful.html -->
+{% extends "main/Layout.html" %}
+{% block title %}
+Payment Successful
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="my-5 text-center">
+        <h1>Payment Successful</h1>
+        <p>Thank you, {{ recruiter.username }}! Your transaction for {{ candidate_name }} has been completed successfully.</p>
+        <p><strong>Amount Paid:</strong> ₹{{ amount }}</p>
+        <p><strong>Payment Method:</strong> {{ payment_method }}</p>
+        <p><strong>Transaction ID:</strong> {{ payment_id }}</p>
+        <p><strong>Payment Date:</strong> {{ date }}</p>
+    </div>
+    <!-- <div class="text-center">
+        <button onclick="goHome()" class="px-3"><span>Go Back to Home</span></button>
+    </div> -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // function goHome() {
+    //     window.location.href = '/';  // Update this to the correct URL path for your home page if needed
+    // }
+
+
+    setTimeout(function() {
+        window.location.href = "{% url 'profiles' %}";
+    }, 5000); // 5-second delay
+</script>
+{% endblock %}

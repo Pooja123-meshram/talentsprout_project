@@ -1,0 +1,141 @@
+.login-form {
+    height: auto;
+    width: 900px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    box-shadow: 0px 0px 5px 1px #e6dddd;
+    padding: 20px;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 40px;
+}
+
+.login-details {
+    width: 80%;
+}
+
+.login-img {
+    width: 350px;
+    height: 600px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.login-img img {
+    width: 400px;
+    height: 600px;
+    border-radius: 20px;
+    filter: brightness(0.9);
+}
+
+.acc-page {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 29px;
+    margin-top: 13px;
+    gap: 2em;
+
+}
+
+.acc-page li a {
+    color: black;
+    font-size: 25px;
+}
+
+.list {
+    border: 1px solid black;
+    padding: 0px 7px;
+    border-radius: 40px;
+}
+
+.login-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+
+.name {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fname {
+    width: 170px;
+}
+
+.lname {
+    width: 190px;
+}
+
+.inputs {
+    outline: none;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background-color: #C6E3DB;
+    font-size: 18px;
+}
+
+.contact {
+    width: 100%;
+}
+
+.arrow {
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.personal-info {
+    width: 300px;
+    position: absolute;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    color: white;
+    background: linear-gradient(45deg, #aba8a85c, #100f0f00);
+    padding: 20px 9px;
+    border-radius: 10px;
+}
+
+.personal-info h4 {
+    color: rgb(255, 255, 255);
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+.detail {
+    letter-spacing: 3px;
+    font-size: 13px;
+}
+
+.personal-info p {
+    letter-spacing: 3px;
+    font-size: 13px;
+    margin-bottom: 0px;
+}  
+
+/* Media queries to hide the image on tablet and mobile screens */
+@media (max-width: 768px) {
+    .login-img {
+        display: none; /* Hide the image */
+    }
+
+    .login-form {
+        flex-direction: column; /* Stack elements vertically */
+        width: 90%; /* Adjust width */
+        gap: 0; /* Remove gap */
+    }
+}

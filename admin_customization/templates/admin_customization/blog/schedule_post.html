@@ -1,0 +1,15 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}Schedule Post{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-5">
+    <h2>Schedule Blog Post</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Schedule</button>
+        <a href="{% url 'admin_blog_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

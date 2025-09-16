@@ -1,0 +1,197 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+{{ candidate.user.username }}'s Profile
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Main profile card layout */
+    .profile-card {
+      max-width: 1100px;
+      background-color: white;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      padding: 30px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 30px;
+      position: relative;
+    }
+
+    /* Left side */
+    .left {
+      background-color: #e6f5e6; /* Light green */
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .left img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #3498db;
+      margin-bottom: 16px;
+    }
+
+    .left h2 {
+      margin: 8px 0 4px;
+    }
+
+    .left p {
+      margin: 4px 0;
+      color: #444;
+    }
+
+    .left h5 {
+      margin-top: 20px;
+    }
+
+    .left .action-buttons {
+      margin-top: 20px;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      width: 160px;
+      margin: 6px 0;
+    }
+
+    .message-btn {
+      background-color: #ffffff;
+      color: #3498db;
+      border: 2px solid #3498db;
+    }
+
+    .message-btn:hover {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .pay-btn {
+      background-color: #2ecc71;
+      color: #ffffff;
+      border: 2px solid transparent;
+    }
+
+    .pay-btn:hover {
+      background-color: #27ae60;
+    }
+
+    /* Right panel layout */
+    .right section {
+      background-color: #f9f9f9;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .right h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+      font-size: 1.1rem;
+    }
+
+    .skills span {
+      display: inline-block;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      margin: 4px 6px 4px 0;
+    }
+
+    .back-button {
+      display: block;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .back-button a {
+      text-decoration: none;
+      background-color: #ccc;
+      padding: 10px 20px;
+      border-radius: 25px;
+      color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-card">
+  <!-- Left Panel -->
+  <div class="left">
+    {% if candidate.userprofile.profile_image %}
+      <img src="{{ candidate.userprofile.profile_image.url }}" alt="{{ candidate.username }}">
+    {% else %}
+      <img src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+    {% endif %}
+
+    <h2>{{ candidate.first_name }} {{ candidate.last_name }}</h2>
+    <p>{{ candidate.userprofile.position }}</p>
+    <p>⭐ Level: {{ candidate.userprofile.level }}</p>
+    <p>📍 {{ candidate.userprofile.address }}</p>
+
+    <h5>Languages</h5>
+    <p>{{ candidate.userprofile.languages }}</p>
+
+    {% if request.user.role == 'recruiter' %}
+    <div class="action-buttons">
+      <a class="btn message-btn" href="{% url 'start_chat' candidate.id %}">Message Candidate</a>
+      <a class="btn pay-btn" href="{% url 'subscription_list' candidate.id %}">Pay Now</a>
+    </div>
+    {% endif %}
+  </div>
+  
+  <!-- Right Panel -->
+  <div class="right">
+    <section class="about">
+      <h3>About</h3>
+      <p>{{ candidate.userprofile.career_objective|default:"Full-stack developer with experience in modern web technologies. Built scalable applications for startups and helped launch 3 successful products. Passionate about clean code and user experience." }}</p>
+    </section>
+    <section class="skills">
+      <h3>Skills & Expertise</h3>
+      <span>{{ candidate.userprofile.skills }}</span>
+    </section>
+    <section class="experience">
+      <h3>Experience</h3>
+      <p>{{ candidate.userprofile.experience }}</p>
+    </section>
+    <section class="education">
+      <h3>Education</h3>
+      {% for edu in candidate.userprofile.educations.all %}
+        <p><strong>{{ edu.education_level }}</strong> - {{ edu.degree }} in {{ edu.specialization }}, {{ edu.college_name }} ({{ edu.end_year|default:"Present" }})</p>
+      {% endfor %}
+    </section>
+    <section class="projects">
+      <h3>Projects</h3>
+      <ul>
+        {% for project in candidate.userprofile.projects.all %}
+          <li>{{ project.project_number|default:0 }} projects – {{ project.title }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="back-button">
+  <a href="{% url 'all_candidates' %}">← Back to All Candidates</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

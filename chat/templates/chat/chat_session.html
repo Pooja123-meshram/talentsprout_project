@@ -1,0 +1,180 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Chat with {{ candidate.first_name }} {{ candidate.last_name }}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-window {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        background-color: #000;
+        color: #fff;
+        padding: 10px;
+        font-size: 18px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .chat-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        background-color: #fff;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    .form {
+        display: flex;
+        width: 100%;
+    }
+
+    .message-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .message-item {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        max-width: 60%;
+    }
+
+    .sent {
+        background-color: #d1ffd1;
+        align-self: flex-end;
+        text-align: right;
+    }
+
+    .received {
+        background-color: #ffd1d1;
+        align-self: flex-start;
+        text-align: left;
+    }
+
+    .chat-window::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chat-window::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 3px;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container mt-5">
+    <div class="row m-5">
+        <!-- Chat Section (Left) -->
+        <div class="col-md-8">
+            <div class="chat-header">
+                <h2>Chat with {{ candidate.first_name }} {{ candidate.last_name }}</h2>
+            </div>
+            <div class="chat-window my-3">
+                <ul class="message-list">
+                    {% for message in messages %}
+                        {% if message.sender == user %}
+                            <li class="message-item sent">
+                                <strong>You:</strong>
+                                <p>{{ message.content }}</p>
+                                <small>{{ message.timestamp }}</small>
+                            </li>
+                        {% else %}
+                            <li class="message-item received">
+                                <strong>{{ candidate.first_name }} {{ candidate.last_name }}:</strong>
+                                <p>{{ message.content }}</p>
+                                <small>{{ message.timestamp }}</small>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="chat-input">
+                <form method="post" class="form">
+                    {% csrf_token %}
+                    <input name="content" class="form-control" placeholder="Type your message...">
+                    <button type="submit" class="px-3" style="margin-left: 10px;"><span>Send</span></button>
+                </form>
+            </div>
+        </div>
+
+       <!-- Detailed Project Assignment Form (Right Side) -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5>Assign Project</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'assign_project' candidate.id %}" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
+
+                        <!-- Project Name -->
+                        <div class="mb-3">
+                            <label for="project_name" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" name="project_name" id="project_name" required>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+                        </div>
+
+                        <!-- Technology Stack -->
+                        <div class="mb-3">
+                            <label for="tech_stack" class="form-label">Technology Stack</label>
+                            <input type="text" class="form-control" name="tech_stack" id="tech_stack" placeholder="e.g., Python, Django, React">
+                        </div>
+
+                        <!-- Upload Document -->
+                        <div class="mb-3">
+                            <label for="document" class="form-label">Attach Document</label>
+                            <input type="file" class="form-control" name="document" id="document">
+                        </div>
+
+                        <!-- Remarks -->
+                        <div class="mb-3">
+                            <label for="remarks" class="form-label">Remarks / Notes</label>
+                            <textarea class="form-control" name="remarks" id="remarks" rows="2"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100"><span>Assign Project</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+

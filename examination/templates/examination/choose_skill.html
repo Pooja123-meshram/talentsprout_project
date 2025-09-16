@@ -1,0 +1,31 @@
+{% extends "main/Layout.html" %}
+
+{% block title %}
+Choose a Skill
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Choose a Skill to Start the Test</h1>
+
+    <div class="container mt-4">
+        <div class="row">
+            {% if skills %}
+                {% for skill in skills %}
+                    <div class="col-md-4 mb-4"> <!-- Adjust the column size as needed -->
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ skill.name }}</h5>
+                                <p class="card-text">Description: {{ skill.description|truncatewords:20 }}</p> <!-- Add a description if available -->
+                                <a href="{% url 'start_test' skill.id %}" ><button class="px-3"><span>Start Test</span></button></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No skills available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

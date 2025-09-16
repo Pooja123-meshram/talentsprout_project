@@ -1,0 +1,232 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Talents
+{% endblock %}
+
+{% block extra_css %}
+<style>
+     .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        border-radius: 20px;
+        padding: 15px;
+    }
+
+    .card {
+        transition: 400ms;
+        border: none;
+        background-color: ghostwhite;
+        border-radius: 15px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .img-content {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .img-content img {
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #ddd;
+    }
+
+    .box {
+        height: 95px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.4rem;
+        font-weight: 500;
+        transition: 400ms;
+        cursor: pointer;
+        text-align: center;
+        padding: 0.5em 1em;
+        border-radius: 10px;
+    }
+
+    .box:hover {
+        background-color: #f1f1f1;
+        transform: scale(1.05);
+        box-shadow: 0px 0px 7px 0px #aeaaaa;
+    }
+
+    #contain {
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
+    }
+
+    .boxx {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        justify-content: center;
+    }
+
+    @media (max-width: 992px) {
+        .card-img-top {
+            height: 180px;
+        }
+
+        .box {
+            font-size: 1rem;
+            padding: 0.5em;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-img-top {
+            height: 160px;
+        }
+
+        .box {
+            height: auto;
+            width: 100%;
+            font-size: 0.9rem;
+            padding: 0.8em;
+        }
+
+        .card-title {
+            font-size: 1rem;
+        }
+
+        .img-content img {
+            height: 30px;
+            width: 30px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="mb-4 talent_header">
+        <h2>Our Talents</h2>
+        <p>Specialized {{ random_skill }} experts you can count on</p>
+    </div>
+
+    <!-- Talent Content: Will dynamically update based on clicked skill -->
+    <div class="row" id="talent-content">
+        <!-- Initial talent cards -->
+        {% for service in related_services %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+                <a href="{% url 'skill_service_candidates' service.id %}" class="card-link" style="text-decoration: none; color: black;">
+                    {% if  service.icon %}
+                    <img src="{{ service.icon.url }}" alt="Card Image" class="card-img-top">
+                    {% else %}
+                    <img src="{% static 'assets/nature1.jpeg' %}" alt="Card Image" class="card-img-top">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service.name }}</h5>
+                        <!-- <div class="img-content">
+                            {% for user in related_user_profiles %}
+                            <img src="{{ user.profile_image.url }}" alt="{{ user.user.username }}">
+                            {% endfor %}
+                        </div> -->
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Display other skills -->
+<div class="container my-5" id="contain">
+    <div class="mb-4">
+        <h2>Other Skills</h2>
+    </div>
+    <div class="row boxx">
+        {% for skill in rest_of_skills %}
+        <div class="col-5 col-sm-6 col-md-3">
+            <!-- Add data-skill-id attribute to each skill -->
+            <div class="box" data-skill-id="{{ skill.id }}">{{ skill.skill }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add click event listener to all skill boxes
+        document.querySelectorAll('.box').forEach(box => {
+            box.addEventListener('click', function () {
+                const skillId = this.getAttribute('data-skill-id'); // Get the skill ID
+
+                // Fetch related talent data for the clicked skill
+                fetch(`{% url 'fetch_skill_data' 0 %}`.replace('0', skillId))
+                    .then(response => response.json())
+                    .then(data => {
+                        const talentContent = document.getElementById('talent-content'); // Select the talent cards container
+                        talentContent.innerHTML = ''; // Clear previous talent cards
+    
+                        // Update the paragraph with the new random skill
+                        const skillText = document.querySelector('.talent_header p'); // Select the <p> element
+                        skillText.textContent = `Specialized ${data.random_skill} experts you can count on`; // Update the text content
+    
+                        // Append new service cards dynamically
+                        data.related_services.forEach(service => {
+                            const serviceCard = document.createElement('div');
+                            serviceCard.classList.add('col-md-6', 'col-lg-4', 'mb-4');
+                            const serviceUrl = `{% url 'skill_service_candidates' 0 %}`.replace('0', service.id);
+
+                            // Check if the service has an icon, if not, use default image
+                            const serviceImage = service.icon ? service.icon : `{% static 'assets/nature1.jpeg' %}`;
+
+                            serviceCard.innerHTML = `
+                                <div class="card">
+                                    <a href="${serviceUrl}" class="card-link" style="text-decoration: none; color: black;">
+                                        <img src="${serviceImage}" class="card-img-top" alt="Card Image">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${service.name}</h5>
+                                            <div class="img-content">
+                                                ${data.related_user_profiles.map(user => `
+                                                    <img src="${user.profile_image}" alt="${user.username}">
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            `;
+                            talentContent.appendChild(serviceCard); // Append the card to the row container
+                        });
+                    });
+            });
+        });
+    });
+</script>
+{% endblock %}
+

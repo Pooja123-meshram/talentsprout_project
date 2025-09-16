@@ -1,0 +1,141 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+Student Test Details
+{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">{{ site_header }}</h2>
+
+    {% if student_tests %}
+    <div class="card">
+        <div class="card-header">
+            <h3>Test Details for {{ student_tests.0.user.username }}</h3>
+        </div>
+        <div class="card-body">
+            {% for test in student_tests %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Test for Skill: {{ test.skill.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Score:</strong> {{ test.score }}</li>
+                        <li class="list-group-item"><strong>Completed:</strong> {{ test.completed|yesno:"Yes,No" }}</li>
+                        <li class="list-group-item"><strong>Completion Date:</strong> 
+                            {% if test.completed_date %}
+                                {{ test.completed_date|date:"d M, Y H:i" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item"><strong>GitHub Link:</strong> 
+                            {% if test.github_link %}
+                                <a href="{{ test.github_link }}" target="_blank">{{ test.github_link }}</a>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item"><strong>Created At:</strong> {{ test.created_at|date:"d M, Y H:i" }}</li>
+                    </ul>
+
+                    <!-- Update Test Score Form -->
+                    <h5 class="mt-4">Update Test Score:</h5>
+                    <div class="mt-3 border p-3 rounded">
+                        <form method="post" action="{% url 'update_test_score' test.id %}">
+                            {% csrf_token %}
+                            <label for="id_score" class="form-label">Score:</label>
+                            <input 
+                                type="number" 
+                                name="score" 
+                                id="id_score" 
+                                value="{{ test.score }}" 
+                                class="form-control" 
+                                placeholder="Enter new score" 
+                                required>
+                            <button type="submit" class="btn btn-success btn-sm mt-2">Update Score</button>
+                        </form>
+                    </div>
+
+                    <!-- Display Student's Answers -->
+                    <h5 class="mt-4">Answers Provided:</h5>
+                    <div>
+                        <form method="post" action="{% url 'view_student_test' user_id=test.user.id %}" id="answer_form">
+                            {% csrf_token %}
+                            <ul class="list-group">
+                                {% for answer in test.answers.all %}
+                                <li class="list-group-item">
+                                    <strong>Question:</strong> {{ answer.question.text|safe }} <br>
+
+                                    {% if answer.question.type == "CODE" %}
+                                    <strong>Correct Answer:</strong>
+                                    <pre>{{ answer.question.correct_answer }}</pre>
+                                    <strong>Student's Answer:</strong>
+                                    <pre>{{ answer.answer }}</pre>
+
+                                    <label for="code_score_{{ answer.id }}">Score:</label>
+                                    <input type="number" id="code_score_{{ answer.id }}" name="scores_{{ answer.id }}" 
+                                         value="{% if answer.score %}{{ answer.score.value }}{% else %} {% endif %}" max="10" />
+
+                                   
+                                    {% else %}
+                                    <strong>Correct Answer:</strong> {{ answer.question.correct_answer|safe }} <br>
+                                    <strong>Student's Answer:</strong> {{ answer.answer|safe }} <br>
+                                    <strong>Is Correct:</strong>
+                                    <select name="is_correct_{{ answer_id }}" class="form-control mt-2">
+                                        <option value="True" {% if answer.is_correct %}selected{% endif %}>Yes</option>
+                                        <option value="False" {% if not answer.is_correct %}selected{% endif %}>No</option>
+                                    </select>
+                                    <input type="hidden" name="answer_ids" value="{{ answer_id }}">
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <button type="submit" class="btn btn-primary btn-sm mt-4">Save Updates</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <p>No tests found for this student.</p>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ensure only one form submission happens
+        const answerForm = document.getElementById('answer_form');
+        if (answerForm) {
+            answerForm.addEventListener('submit', function(event) {
+                event.preventDefault();  // Prevent default form submission
+
+                var formData = new FormData(answerForm);
+                
+                fetch(answerForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirect after successful submission
+                        window.location.href = "{% url 'examination' %}";
+                    } else {
+                        console.log('Error in saving updates:', data);
+                        alert('Failed to save updates. Please try again.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
+    });
+</script>
+
+{% endblock %}

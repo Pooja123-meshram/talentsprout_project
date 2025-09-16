@@ -1,0 +1,229 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Settings
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/profiles.css' %}">
+<link rel="stylesheet" href="{% static 'css/Layout.css' %}">
+<link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="main-container my-5">
+      <div class="row">
+        <div class="col-md-3 col-lg-2 sidebar">
+          <div>
+              <h4 class="text-center">Setting</h4>
+          </div>
+          <a href="#accountSection" id="accountLink" class="nav-link active my-4 px-4">Account</a>
+          <a href="#securitySection" id="securityLink" class="nav-link my-4 px-4">Security</a>
+        </div>
+        <div class="col-sm-10 col-md-8 col-lg-9 ms-5 content-area">
+          <div id="accountSection" class="content-section active">
+            <h4 class="section-heading">Account Settings</h4>
+            <div class="card card-custom mb-4 p-4">
+              <h5 class="mb-4">Personal Information</h5>
+              <div class="d-flex flex-column">
+                <p><strong>Name:</strong> {{ custom_user.first_name }} {{ custom_user.last_name }}</p>
+                <p><strong>Email:</strong> {{ custom_user.email }}</p>
+                <!-- <p><strong>Phone:</strong> {{ custom_user.phone }}</p> -->
+                <p><strong>Phone:</strong> {{ masked_phone }}</p>
+                {% if custom_user.role == "recruiter" %}
+                  <p><strong>Company:</strong> {{ profile.company }}</p>
+                {% endif %}
+                {% if custom_user.role == "candidate" %}
+                <!-- bank & UPI -->
+                <p><strong>Bank Account Name:</strong> {{ masked_bank_account_name }}</p>
+                <p><strong>Account Number:</strong> {{ masked_account_number }}</p>
+                <p><strong>Bank Name:</strong> {{ masked_bank_name }}</p>
+                <p><strong>IFSC Code:</strong> {{ masked_bank_ifsc_code }}</p>
+                <p><strong>Branch:</strong> {{ masked_bank_branch }}</p>
+                <p><strong>Backup UPI ID:</strong> {{ masked_upi }}</p>
+
+                {% endif %}
+                <div>
+                  <button type="button" class="px-3" data-toggle="modal" data-target="#editPersonalInfoModal"><span>Edit</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <div id="securitySection" class="content-section" style="display:none;">
+            <h4 class="section-heading">Security</h4>
+            <p>Manage your security settings:</p>
+            <div class="card card-custom mb-4 p-4">
+              <h5 class="mb-4">Change Password</h5>
+              <div>
+                <button type="button" class="px-3" data-toggle="modal" data-target="#changePasswordModal"><span>Change Password</span></button>
+              </div>
+            </div>
+            <div class="card card-custom mb-4 p-4">
+              <h5 class="mb-4">Privacy Policy</h5>
+              <div class="privacy-policy-content">
+                <p>We value your privacy and are committed to protecting your personal information. Our privacy policy outlines how we collect, use, and protect your data. We do not share your information with third parties without your consent, and we take all necessary measures to ensure its security.</p>
+                <p>For more details, please read our full <a href="{% url "privacy_policy" %}">Privacy Policy</a>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Edit Personal Information Modal -->
+<div class="modal fade" id="editPersonalInfoModal" tabindex="-1" aria-labelledby="editPersonalInfoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <h5 class="modal-title" id="editPersonalInfoModalLabel">Edit Personal Information</h5>
+        <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
+          <span><i class="fa-solid fa-xmark"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editPersonalInfoForm" method="post" action="{% url 'settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="save_changes" value="1">
+          {{ form.non_field_errors }}
+          <div class="form-group">
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.phone.label_tag }}
+            {{ form.phone }}
+            {{ form.phone.errors }}
+          </div>
+           <!-- Bank Details Fields -->
+          {% if custom_user.role == "candidate" %}
+          <h5 class="mt-4">Bank Details</h5>
+
+          <div class="form-group">
+            {{ bank_form.bank_account_name.label_tag }}
+            {{ bank_form.bank_account_name }}
+            {{ bank_form.bank_account_name.errors }}
+          </div>
+
+          <div class="form-group">
+            {{ bank_form.bank_account_number.label_tag }}
+            {{ bank_form.bank_account_number }}
+            {{ bank_form.bank_account_number.errors }}
+          </div>
+
+          <div class="form-group">
+            {{ bank_form.bank_name.label_tag }}
+            {{ bank_form.bank_name }}
+            {{ bank_form.bank_name.errors }}
+          </div>
+
+          <div class="form-group">
+            {{ bank_form.bank_ifsc_code.label_tag }}
+            {{ bank_form.bank_ifsc_code }}
+            {{ bank_form.bank_ifsc_code.errors }}
+          </div>
+
+          <div class="form-group">
+            {{ bank_form.bank_branch.label_tag }}
+            {{ bank_form.bank_branch }}
+            {{ bank_form.bank_branch.errors }}
+          </div>
+
+          <div class="form-group">
+            {{ bank_form.upi_id.label_tag }}
+            {{ bank_form.upi_id }}
+            {{ bank_form.upi_id.errors }}
+          </div>
+          {% endif %}
+          <div class="modal-footer">
+            <button type="button" class="px-3" data-dismiss="modal"><span>Cancel</span></button>
+            <button type="submit" class="px-3" id="saveChangesButton"><span>Save Changes</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+        <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
+          <span><i class="fa-solid fa-xmark"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="changePasswordForm" method="post" action="{% url 'settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="change_password" value="1">
+          {{ change_passform.as_p }}
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="showPasswordCheckbox">
+            <label class="form-check-label" for="showPasswordCheckbox">Show Password</label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="px-3" data-dismiss="modal"><span>Cancel</span></button>
+            <button type="submit" class="px-3"><span>Change Password</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const links = document.querySelectorAll(".sidebar a");
+    const sections = document.querySelectorAll(".content-section");
+
+    links.forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        // Remove active class from all links and sections
+        links.forEach(link => link.classList.remove("active"));
+        sections.forEach(section => section.style.display = "none");
+
+        // Add active class to the clicked link and show corresponding section
+        this.classList.add("active");
+        const targetSection = document.querySelector(this.getAttribute("href"));
+        targetSection.style.display = "block";
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+    const passwordFields = document.querySelectorAll('input[type="password"]');
+
+    showPasswordCheckbox.addEventListener('change', function () {
+      const showPassword = this.checked;
+      passwordFields.forEach(function (field) {
+        field.type = showPassword ? 'text' : 'password';
+      });
+    });
+  });  
+</script>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "admin_customization/Index.html" %}
+
+{% load static %}
+
+{% block title %}
+  project Progress
+{% endblock %}
+
+{% block admin_extra_css %}
+<style>
+    .table-white {
+        background-color: white;
+        border-radius: 10px; /* Adjust the value as needed */
+        overflow: hidden; /* Ensures the rounded corners are visible */
+    }
+</style>
+
+{% endblock %}
+{% block admin_content %}
+<div class="container mt-5">
+    <h3>Progress Stages for: {{ project.project_name }}</h3>
+    <p><strong>Candidate:</strong> {{ project.candidate.username }} | <strong>Recruiter:</strong> {{ project.recruiter.username }}</p>
+
+<div class="table-responsive">
+  <table class="table table-striped table-white">
+    <thead >
+        <tr>
+            <th>Stage Title</th>
+            <th>Description</th>
+            <th>Proof File</th>
+            <th>Candidate Status</th>
+            <th>Recruiter Confirmation</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stage in stages %}
+        <tr>
+            <td><strong>{{ stage.title }}</strong></td>
+            <td>{{ stage.description }}</td>
+            <td>
+                {% if stage.proof_file %}
+                    <a href="{{ stage.proof_file.url }}" target="_blank">📎 View File</a>
+                {% else %}
+                    <span class="text-muted">No File</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if stage.is_completed %}
+                    <span class="badge bg-success">Completed ✅</span><br>
+                    <small>By: {{ project.candidate.username }}</small>
+                {% else %}
+                    <span class="badge bg-secondary">Pending ⏳</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if stage.confirmed_by_recruiter %}
+                    <span class="badge bg-primary">Confirmed ✅</span><br>
+                    <small>By: {{ project.recruiter.username }}</small>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Not Confirmed</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+    <a href="{% url 'project_list' %}" class="btn btn-secondary mt-4">← Back to Project List</a>
+</div>
+{% endblock %}

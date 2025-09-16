@@ -1,0 +1,271 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+How
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    /* Global icon-circle class */
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 22px;
+}
+.section-title {
+  text-align: center;
+  margin-top: 3rem;
+}
+.section-title h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.section-title p {
+  color: #555;
+  font-size: 1rem;
+}
+
+.certificates-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.certificate {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  width: 320px; /* updated from 300px to 320px */
+  text-align: center;
+  position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.certificate:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+}
+
+.certificate:active {
+  transform: scale(1.05);
+}
+
+.certificate .icon-circle {
+  font-size: 22px;
+}
+
+.certificate .tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+  font-size: 0.85rem;
+}
+
+.red { background-color: #fde2e2; color: #b22222; }
+.yellow { background-color: #fff4c2; color: #8a6d00; }
+.blue { background-color: #d7e6ff; color: #004aad; }
+.green { background-color: #d2fbe1; color: #007b3a; }
+.purple { background-color: #f0e5ff; color: #5e3d9c; }
+
+.requirements {
+  background: #f5f7fa;
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+a.button-link {
+  display: inline-block;
+  text-decoration: none;
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+a.button-link:hover {
+  background: #eef;
+  border-color: #aad;
+}
+
+.how-it-works {
+  padding: 3rem 1rem;
+  text-align: center;
+  background: white;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.step {
+  background: #f8f9fd;
+  padding: 1.5rem;
+  border-radius: 15px;
+  width: 260px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: white;
+  text-align: center;
+}
+
+.circle.blue { background-color: #4a90e2; }
+.circle.green { background-color: #3cb371; }
+.circle.purple { background-color: #9370db; }
+
+.certificate i.fa-ribbon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #f1b400;
+}
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container mt-5">
+
+<div class="section-title">
+  <div class="icon-circle purple">
+      <i class="fas fa-file-alt"></i>
+  </div>
+
+  <h2>Skill Level Certificates</h2>
+  <p>Discover what type of certificate you'll receive based on your skill level achievement</p>
+</div>
+
+<section class="certificates-section">
+  <div class="certificate">
+    <i class="fas fa-ribbon"></i>
+      <div class="icon-circle red">
+        <i class="fas fa-file-alt"></i>
+      </div>
+      <div class="tag red">Beginner</div>
+      <h3>Beginner</h3>
+      <p>Basic programming fundamentals and core concepts</p>
+      <div class="requirements">
+        <strong>Requirements:</strong><br/>
+        Score ≤ 80
+      </div>
+      <a href="#" class="button-link">Click to learn more</a>
+  </div>
+
+  <div class="certificate">
+    <i class="fas fa-ribbon"></i>
+    <div class="icon-circle yellow">
+      <i class="fas fa-star"></i>
+    </div>
+    <div class="tag yellow">Level 1</div>
+    <h3>Intermeditate</h3>
+    <p>Strong theoretical knowledge, ready for first projects</p>
+    <div class="requirements">
+      <strong>Requirements:</strong><br/>
+      Score > 80, 0 projects
+    </div>
+    <a href="#" class="button-link">Click to learn more</a>
+  </div>
+
+  <div class="certificate">
+    <i class="fas fa-ribbon"></i>
+    <div class="icon-circle blue">
+      <i class="fas fa-medal"></i>
+    </div>
+    <div class="tag blue">Level 2</div>
+    <h3>Advanced</h3>
+    <p>Proven skills with initial project experience</p>
+    <div class="requirements">
+      <strong>Requirements:</strong><br/>
+      Score > 80, 1–2 projects
+    </div>
+    <a href="#" class="button-link">Click to learn more</a>
+  </div>
+
+  <div class="certificate">
+    <i class="fas fa-ribbon"></i>
+    <div class="icon-circle green">
+      <i class="fas fa-trophy"></i>
+    </div>
+    <div class="tag green">Level 3</div>
+    <h3>Expert</h3>
+    <p>Strong skills with solid project portfolio</p>
+    <div class="requirements">
+      <strong>Requirements:</strong><br/>
+      Score > 80, 3–4 projects
+    </div>
+    <a href="#" class="button-link">Click to learn more</a>
+  </div>
+
+  <div class="certificate">
+    <i class="fas fa-ribbon"></i>
+    <div class="icon-circle purple">
+      <i class="fas fa-award"></i>
+    </div>
+    <div class="tag purple">Level 4</div>
+    <h3>Master</h3>
+    <p>Experienced developer with extensive project history</p>
+    <div class="requirements">
+      <strong>Requirements:</strong><br/>
+      Score > 80, 5+ projects
+    </div>
+    <a href="#" class="button-link">Click to learn more</a>
+  </div>
+</section>
+
+<section class="how-it-works">
+  <h2>How Certification Works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="circle blue">1</div>
+      <h3>Complete Assessment</h3>
+      <p>Take our comprehensive skill assessment to determine your current level</p>
+    </div>
+    <div class="step">
+      <div class="circle green">2</div>
+      <h3>Build Projects</h3>
+      <p>Complete real-world projects to demonstrate your practical skills</p>
+    </div>
+    <div class="step">
+      <div class="circle purple">3</div>
+      <h3>Receive Certificate</h3>
+      <p>Get your official certificate based on your achieved skill level</p>
+    </div>
+  </div>
+
+</section>
+</section>
+{% endblock %}

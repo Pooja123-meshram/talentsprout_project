@@ -1,0 +1,97 @@
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Post Details
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/service.css' %}">
+
+<style>
+  .service-title {
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: left;
+    margin-left: 13px;
+  }
+  .image-container img {
+    border-radius: 10px;
+    height: 350px;
+    width: 100%;
+    object-fit: cover;
+  }
+  .banner {
+    background: url('banner-image.jpg') no-repeat center center;
+    background-size: cover;
+    height: 300px;
+  }
+  .banner h1 {
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- content -->
+<section class="container mt-5">
+  <!-- Banner Section -->
+  <div class="text-center">
+      <h2 class="service-title">Create Post</h2>
+      <div class="container image-container">
+          <img src="{% static 'assets/service.jpeg' %}" alt="Laptop on a desk" class="img-fluid">
+      </div>
+  </div>
+  <!-- Create Post Section -->
+  <div class="container text-center my-5">
+      <h2>Create stunning blog posts effortlessly.</h2>
+      <p>Share your insights, engage with readers, and build your online presence globally.</p>
+      <div>
+        <a href="{% url 'create_blog_post' %}"><button class="px-3"><span>Create Post</span></button></a>
+      </div>
+  </div>
+  <!-- Blog Posts Section -->
+  <div class="container my-5">
+      <h2 class="service-title">Your Posts</h2>
+      <div class="row mb-5" id="posts-container">
+          <!-- Blog Post 1 -->
+          {% for post in posts %}
+          <div class="col-lg-4 col-md-6 col-sm-12 my-5 py-2 d-flex justify-content-center align-items-center">
+              <div class="card cards" style="width: 300px; height: 464px;">
+                  <!-- Display the first image if available, otherwise a sample image -->
+                  {% if post.images.all %}
+                    <img src="{{ post.images.all.0.image.url }}" alt="Blog image" class="card-img-top" />
+                  {% else %}
+                    <img src="{% static 'assets/nature2.jpeg' %}" alt="Sample Image" class="card-img-top" />
+                  {% endif %}
+                  <div class="card-body">
+                      <h5 class="card-title">{{ post.title }}</h5>
+                      <div class="detailed">
+                          <div class="detail">
+                              {% if user_profile and profile_image_url %}
+                                <img class="post_avatar" src="{{ profile_image_url }}" alt="avatar" width="80" height="80">
+                              {% else %}
+                                <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                              {% endif %}
+                              <p class="card-text">{{ post.user.first_name }} {{ post.user.last_name }}</p>
+                          </div>
+                          <div class="images-img">
+                              <div><span>12</span> <i class="fa-solid fa-share-nodes"></i> </div>
+                              <div><span>12</span> <i class="fa-regular fa-message"></i></div>
+                          </div>
+                      </div>
+                      <p class="card-text mt-2 descr">{{ post.content|safe|truncatewords:10 }}</p>
+                      <div class="text-center buttn">
+                          <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
+                      </div>
+                  </div>
+              </div>
+          </div> 
+          {% endfor %}
+      </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,297 @@
+{% extends "admin_customization/Index.html" %}
+{% load static %}
+
+{% block title %}Create Blog Post{% endblock %}
+
+{% block admin_extra_css %}
+<!-- <link rel="stylesheet" href="{% static 'css/post_creation_form.css' %}"> -->
+
+<style>
+  .contain {
+    display: flex;
+    margin: 70px auto;
+  }
+
+  .sidebar {
+    width: 40%;
+    padding: 20px;
+    background-color: #f8f9fe; /* Argon light background */
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .stepsss {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .progress {
+    position: absolute;
+    left: 27px;
+    transform: translateX(-50%);
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #dee2e6;
+    z-index: 0;
+  }
+
+  .indicator {
+    width: 100%;
+    background-color: #5e72e4; /* Argon primary */
+    height: 0;
+    transition: height 0.8s ease;
+  }
+
+  .sidebar ul {
+    list-style-type: none;
+    padding-left: 50px;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .sidebar ul li {
+    position: relative;
+    color: #8392ab; /* Argon muted text */
+    font-size: 18px;
+  }
+
+  .sidebar ul li::before {
+    content: attr(data-step);
+    position: absolute;
+    left: -23px;
+    transform: translateX(-50%);
+    top: -3px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #d2d6da;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .sidebar ul li.completed::before {
+    background-color: #2dce89; /* Argon green */
+  }
+
+  .sidebar ul li.active::before {
+    background-color: #5e72e4; /* Argon primary */
+  }
+
+  .form-content {
+    width: 70%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+  }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .nav-buttons button {
+    background-color: #5e72e4; /* Argon primary */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .nav-buttons button:hover {
+    background-color: #324cdd;
+    transform: scale(1.05);
+  }
+
+  .nav-buttons button:disabled {
+    background-color: #ccc;
+    color: #fff;
+    cursor: not-allowed;
+  }
+
+  .text-success {
+    color: #2dce89 !important; /* Argon green */
+  }
+
+  .form-control {
+    background-color: #edf2f9;
+    border: 1px solid #d2d6da;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 17px;
+    color: #495057;
+  }
+
+  .form-group textarea {
+    padding: 17px;
+  }
+
+  @media (max-width: 768px) {
+    .image-card {
+      width: 45%;
+    }
+
+    .contain {
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 80%;
+    }
+
+    .form-content {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .image-card {
+      width: 100%;
+    }
+  }
+
+  .s-img {
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+
+
+  .view-blog-btn {
+  background-color: #2dce89; /* Argon green */
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.view-blog-btn:hover {
+  background-color: #24b57d;
+  text-decoration: none;
+}
+
+</style>
+
+
+{% endblock %}
+
+{% block admin_content %}
+<!-- <div class="mb-4" style="text-align: right;">
+        <a href="{% url 'admin_blog_list' %}" class="view-blog-btn">View All Blogs</a>
+</div> -->
+<div class="container contain">
+    
+    <div class="sidebar">
+        <h4>Create Your Blog</h4>
+        <ul class="stepsss">
+            <li class="active">Blog Details</li>
+            <li>Upload Images</li>
+            <li>Preferences</li>
+            <li>Submit</li>
+            <div class="progress"><div class="indicator"></div></div>
+        </ul>
+    </div>
+    
+
+    <div class="form-content">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Step 1 -->
+            <div class="step active">
+                <h3>Step 1: Blog Details</h3>
+                {{ blog_post_form.as_p }}
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step">
+                <h3>Step 2: Upload Images</h3>
+                <input type="file" name="image" multiple>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step">
+                <h3>Step 3: Preferences</h3>
+                {{ candidate_preference_form.as_p }}
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step">
+                <h3>Step 4: Confirm</h3>
+                <p class="text-success">You're ready to submit your blog post.</p>
+            </div>
+
+            <div class="nav-buttons mt-4">
+                <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block admin_js %}
+<script>
+    let currentStep = 0;
+    showStep(currentStep);
+
+    function showStep(step) {
+        const steps = document.getElementsByClassName("step");
+        for (let i = 0; i < steps.length; i++) {
+            steps[i].style.display = i === step ? "block" : "none";
+        }
+
+        document.getElementById("prevBtn").style.display = step === 0 ? "none" : "inline-block";
+        document.getElementById("nextBtn").innerHTML = (step === steps.length - 1) ? "Submit" : "Next";
+        updateSidebar(step);
+    }
+
+    function nextPrev(n) {
+        const steps = document.getElementsByClassName("step");
+
+        if (n === 1 && currentStep === steps.length - 1) {
+            document.querySelector("form").submit();
+            return;
+        }
+
+        currentStep += n;
+        showStep(currentStep);
+    }
+
+    function updateSidebar(step) {
+        const sidebarSteps = document.querySelectorAll(".stepsss li");
+        sidebarSteps.forEach((li, i) => {
+            li.classList.remove("active", "completed");
+            if (i < step) li.classList.add("completed");
+            if (i === step) li.classList.add("active");
+        });
+
+        const progress = ((step + 1) / sidebarSteps.length) * 100;
+        document.querySelector(".indicator").style.height = progress + "%";
+    }
+</script>
+{% endblock %}

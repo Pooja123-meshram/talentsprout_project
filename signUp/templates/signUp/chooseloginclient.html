@@ -1,0 +1,110 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Client Login 
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #f8fafc;
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        background: linear-gradient(180deg, #e2f1ff, #ffffff);
+    }
+
+    .login-card {
+        border-radius: 16px;
+        background-color: #fff;
+        padding: 2.5rem;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .login-card img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1.5rem;
+        /* subtle border for polish */
+        border: 2px solid #ddd;
+        background-color: #fafafa;
+        padding: 3px;
+    }
+
+    .login-card h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .login-card p {
+        font-size: 0.95rem;
+        color: #7a7a7a;
+        margin-bottom: 1.8rem;
+        text-align: center; /* center aligned text */
+        line-height: 1.4;
+    }
+
+    .login-options {
+        display: flex;
+        justify-content: center;
+    }
+
+    .login-options a {
+        text-decoration: none;
+    }
+
+    /* Keep your original button shape and color, just add cursor pointer */
+    .login-options button {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .signup-link {
+        margin-top: 2rem;
+        font-size: 0.9rem;
+    }
+
+    .signup-link a {
+        font-weight: bold;
+        text-decoration: none;
+        color: #2980b9;
+        transition: color 0.3s ease;
+    }
+
+    .signup-link a:hover {
+        color: #1f6694;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <img src="{% static 'assets/candidate2.jpg' %}" alt="User Avatar">
+        <h2>Join as a Client</h2>
+        <p>Join our platform to assign projects, evaluate real candidate performance, and hire top talent that fits your needs.</p>
+        <div class="login-options">
+            <a href="{% url 'recruiterlogin' %}">
+                <button class="px-3"><span>Log in as a Client</span></button>
+            </a>
+        </div>
+        <p class="signup-link">New here? <a href="{% url 'signupclient' %}">Create your Client account</a> and start finding the perfect candidates today.</p>
+    </div>
+</div>
+{% endblock %}

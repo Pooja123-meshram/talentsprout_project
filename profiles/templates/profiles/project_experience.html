@@ -1,0 +1,73 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Add Project / Experience
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/Layout.css' %}">
+<link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 p-3">
+        <div id="composeSection" class="content-section">
+            <h4 class="section-heading">Compose</h4>
+            <div class="card card-custom mb-4 p-3">
+                <h5 class="mb-4">New Project / Experience</h5>
+                <form id="projectForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_title" class="form-label">Project Title</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_contribution" class="form-label">Contribution</label>
+                        {{ form.contribution }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_technologies" class="form-label">Technologies</label>
+                        {{ form.technologies }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_duration" class="form-label">Duration</label>
+                        {{ form.duration }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_description" class="form-label">Description</label>
+                        {{ form.description }}
+                    </div>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if 'add_project' in message.tags %}
+                                <div class="alert {{ message.tags }}">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <button type="submit" class="btn btn-dark border-0 rounded-3"><span>Save Project</span></button>
+                    <a href="{% url 'profiles' %}" class="btn btn-danger border-0 rounded-3"><span>Cancel</span></a>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        menubar: false,
+        plugins: 'link code',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code'
+    });
+</script>
+{% endblock %}

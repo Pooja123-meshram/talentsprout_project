@@ -1,0 +1,75 @@
+{% extends "admin_customization/Index.html" %}
+{% load static %}
+{% block title %}Candidate Overview{% endblock %}
+{% block admin_content %}
+
+<div class="container-fluid py-4 px-5">
+
+<h2 class="mb-4">Candidate Overview</h2>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border-left-primary shadow py-2">
+            <div class="card-body text-center">
+                <h5>Total Candidates</h5>
+                <h3>{{ total_candidates }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-left-success shadow py-2">
+            <div class="card-body text-center">
+                <h5>Exam Appeared</h5>
+                <h3>{{ appeared_candidates }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-left-info shadow py-2">
+            <div class="card-body text-center">
+                <h5>Project Taken</h5>
+                <h3>{{ took_project_candidates }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-left-danger shadow py-2">
+            <div class="card-body text-center">
+                <h5>Failed Candidates</h5>
+                <h3>{{ failed_candidates }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-5 mb-3">Pending Exam Candidates</h4>
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>No</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Reminder</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for candidate in pending_exam_candidates %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ candidate.username }}</td>
+                <td>{{ candidate.email }}</td>
+                <td>{{ candidate.phone }}</td>
+                <td>
+                    <a href="{% url 'send_reminder_email' candidate.id %}" class="btn btn-sm btn-warning">Send Reminder</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">All candidates have submitted their exams.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}Take Test{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-9 mx-auto">
+      <div id="testSection" class="content-section active">
+        <!-- Dynamic Heading -->
+        <h4 id="sectionHeading" class="section-heading"></h4>
+
+        <!-- Error Message Box -->
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+        {% endif %}
+
+        <form id="testForm" method="post">
+          {% csrf_token %}
+
+          <!-- Questions Section -->
+          <div id="mcq-section">
+            <h4>Multiple Choice Questions</h4>
+            {% for question in questions %}
+              {% if question.type == 'MCQ' %}
+                <div class="question-section mb-3" data-question-id="{{ forloop.counter0 }}" 
+                     data-question-type="{{ question.type }}">
+                  <h5>Question {{ forloop.counter }}:</h5>
+                  <label for="question_{{ question.id }}">{{ question.text|safe }}</label>
+
+                  <!-- MCQ Options -->
+                  <div class="form-group mt-2">
+                    {% for option in question.options_list %}
+                      <div class="form-check" style="margin-bottom: 15px;">
+                        <input class="form-check-input question-answer" type="radio" 
+                               name="question_{{ question.id }}" 
+                               value="{{ option }}" 
+                               id="option_{{ question.id }}_{{ forloop.counter }}">
+                        <label class="form-check-label" 
+                               for="option_{{ question.id }}_{{ forloop.counter }}" 
+                               style="color: black; margin-top: 12px; font-size: 18px;">
+                          {{ option }}
+                        </label>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Submit Button for MCQs -->
+          <div class="text-center mt-3">
+            <button type="button" class="px-3" id="submit-mcq-btn" style="background-color: #267136; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px;">
+              <span>Submit MCQs</span>
+            </button>
+          </div>
+
+          <!-- Code Section -->
+          <div id="code-section" style="display: none;">
+            <h4>Code-Based Questions</h4>
+            {% for question in questions %}
+              {% if question.type == 'CODE' %}
+                <div class="question-section mb-3" data-question-id="{{ forloop.counter0 }}" 
+                     data-question-type="{{ question.type }}">
+                  <h5>Question {{ forloop.counter }}:</h5>
+                  <label for="question_{{ question.id }}">{{ question.text|safe }}</label>
+
+                  <!-- Code Editor -->
+                  <div id="editor_{{ forloop.counter0 }}" class="ace-editor" style="height: 300px; width: 100%; border: 1px solid #ddd;"></div>
+                  <textarea id="hidden_editor_{{ forloop.counter0 }}" class="question-answer" name="question_{{ question.id }}" style="display: none;"></textarea>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Final Submit Button -->
+          <div class="text-center mt-3" id="final-submit-btn" style="display: none;">
+            <button type="submit" class="px-3" style="background-color: #267136; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px;">
+              <span>Submit Test</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const mcqSection = document.getElementById('mcq-section');
+    const codeSection = document.getElementById('code-section');
+    const submitMCQBtn = document.getElementById('submit-mcq-btn');
+    const finalSubmitBtn = document.getElementById('final-submit-btn');
+    const sectionHeading = document.getElementById('sectionHeading');
+    let currentSectionIndex = 0;
+    
+    // Initialize Ace Editors for Code-Based Questions
+    const editors = [];
+    const sections = document.querySelectorAll('.question-section');
+    
+    sections.forEach((section, index) => {
+        const editorDiv = document.getElementById(`editor_${index}`);
+        const hiddenField = document.getElementById(`hidden_editor_${index}`);
+        
+        if (editorDiv) {
+            const editor = ace.edit(editorDiv);
+            editor.setTheme("ace/theme/monokai");
+            editor.session.setMode("ace/mode/javascript");
+            editor.setOptions({
+                fontSize: "16px",
+                wrap: true,
+                showPrintMargin: false
+            });
+
+            // Sync with hidden textarea
+            editors.push({ editor, hiddenField });
+            editor.session.on('change', function () {
+                hiddenField.value = editor.getValue();
+            });
+        }
+    });
+
+    // Show next section
+    function switchSection() {
+        if (currentSectionIndex === 0) {
+            mcqSection.style.display = 'block';
+            codeSection.style.display = 'none';
+            submitMCQBtn.style.display = 'inline-block';
+        } else if (currentSectionIndex === 1) {
+            mcqSection.style.display = 'none';
+            codeSection.style.display = 'block';
+            finalSubmitBtn.style.display = 'inline-block';
+        }
+    }
+
+    // Handle MCQ Submit
+    submitMCQBtn.addEventListener('click', function () {
+        submitMCQBtn.style.display = 'none';
+        currentSectionIndex++;
+        switchSection();
+    });
+
+    // Handle Final Submit
+    finalSubmitBtn.addEventListener('click', function () {
+        editors.forEach(({ editor, hiddenField }) => {
+            hiddenField.value = editor.getValue();
+        });
+    });
+ // Disable copy, paste, right-click, Ctrl+P, and Ctrl+C
+    document.addEventListener('contextmenu', (event) => event.preventDefault()); // Disable right-click
+    document.addEventListener('copy', (event) => event.preventDefault()); // Disable copy
+    document.addEventListener('paste', (event) => event.preventDefault()); // Disable paste
+    document.addEventListener('keydown', (event) => {
+        if (
+            event.ctrlKey && 
+            (event.key === 'c' || event.key === 'p')
+        ) {
+            event.preventDefault();
+        }
+    });
+    // Initial setup to display the first section
+    switchSection();
+});
+</script>
+{% endblock %}

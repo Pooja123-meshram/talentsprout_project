@@ -1,0 +1,239 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Contact Us
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}?v2">
+<style>
+
+    /* Enhanced Send Message Box */
+    .contact-form-wrapper {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .contact-form-wrapper:hover {
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .contact-form-wrapper h5 {
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: #111827; /* gray-900 */
+        margin-bottom: 1.5rem;
+    }
+
+    .contact-form-wrapper .form-control {
+        border-radius: 8px;
+        border: 1px solid #d1d5db; /* gray-300 */
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+    }
+
+    .contact-form-wrapper .form-control:focus {
+        border-color: #2563eb; /* blue-600 */
+        box-shadow: none;
+    }
+
+    .contact-form-wrapper .mb-3 {
+        margin-bottom: 1.25rem !important;
+    }
+
+    /* Responsive Tweaks */
+    @media (max-width: 768px) {
+        .contact-form-wrapper {
+            padding: 1.5rem;
+        }
+    }
+
+ /* Background and section styling */
+    .contact-header {
+        background-color: #d1ecdf; 
+        padding: 3rem 1rem;
+        text-align: center;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+    .fa-phone-alt {
+        color: #2563eb; /* blue-600 */
+    }
+    .fa-envelope {
+        color: #16a34a !important; /* green-600 override */
+    }
+    .fa-map-marker-alt {
+        color: #22c55e; /* green-500 */
+    }
+    .fa-clock {
+        color: #f97316; /* orange-500 */
+    }
+    .fa-calendar-day {
+        color: #4b5563; /* gray-600 */
+    }
+    .fa-calendar-times {
+        color: #ef4444; /* red-500 */
+    }
+    .fa-question-circle {
+        color: #4f46e5; /* indigo-600 */
+    }
+    .fa-comments {
+        color: #3b82f6; /* blue-500 */
+    }
+    .fa-calendar-check {
+        color: #22c55e; /* green-500 */
+    }
+
+    .me-2 {
+        margin-right: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="contact-header">
+    <div class="d-flex justify-content-center mb-2">
+        <div class="d-flex align-items-center justify-content-center bg-success bg-opacity-25 rounded-circle" style="width: 80px; height: 80px;">
+            <i class="fas fa-envelope fa-2x text-success"></i>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mb-4">
+        <h1>Contact Us</h1>
+    </div>
+        <p>Whether you have questions, feedback, or want to discuss a potential project, 
+            feel free to reach out. Your thoughts and inquiries are important to us, and we are here to assist 
+            you in any way we can. Whether you’re looking for more information about our 
+            services or want to brainstorm ideas for your next project, don’t hesitate to get in touch!
+        </p>
+</div>
+
+<div class="container mt-4">
+    {% if messages %}
+    <div class="alert alert-success" id="popup-message">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Contact Form + Info/Questions side by side -->
+    <div class="row">
+        <!-- Left: Send Message Form -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="bg-white p-4 rounded shadow-sm h-100">
+                <h2 class="mb-3">Send us a Message</h2>
+                <br>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.phone }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.message }}
+                    </div>
+                    <br>
+                    <br>
+                    <div class="text-center">
+                        <button class="px-3" type="submit"><span>Send Message</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right: Info + Quick Questions in a column -->
+        <div class="col-12 col-md-6 mb-4 d-flex flex-column gap-3">
+
+            <!-- Get in Touch Card -->
+            {% for support in support_info %}
+            <div class="bg-white p-4 rounded shadow-sm">
+                <div class="detail d-flex flex-column">
+                    <h2>{{ support.title }}</h2>
+                    <p>{{ support.description }}</p>
+                </div>
+                <p><i class="fas fa-phone-alt me-2"></i>{{ support.phone }}</p>
+                <p><i class="fas fa-envelope me-2"></i>{{ support.email }}</p>
+                <p><i class="fas fa-map-marker-alt me-2"></i>{{ support.address }}</p>
+
+                <div class="mt-3">
+                    <p><i class="fas fa-clock me-2"></i><strong>Business Hours</strong></p>
+                    <p><i class="fas fa-calendar-day me-2"></i>Monday - Friday: 9:00 AM – 6:00 PM</p>
+                    <p><i class="fas fa-calendar-day me-2"></i>Saturday: 10:00 AM – 4:00 PM</p>
+                    <p><i class="fas fa-calendar-times me-2"></i>Sunday: Closed</p>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- Quick Questions Card -->
+            <div class="bg-white p-4 rounded shadow-sm">
+                <h5 class="mb-3"><i class="fas fa-question-circle me-2"></i>Quick Questions?</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <i class="fas fa-clock me-2"></i>
+                        <strong>How quickly do you respond?</strong><br>
+                        We typically respond to all inquiries within 24 hours.
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-comments me-2"></i>
+                        <strong>What's the best way to reach you?</strong><br>
+                        For urgent matters, call us. For detailed inquiries, use the contact form.
+                    </li>
+                    <li>
+                        <i class="fas fa-calendar-check me-2"></i>
+                        <strong>Can I schedule a consultation?</strong><br>
+                        Yes! Mention your preferred time in the message and we’ll arrange a call.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Map Section -->
+    {% for support in support_info %}
+
+    <div class="map-section mt-5">
+        <h2>{{ support.map_title }}</h2>
+        <div class="d-flex justify-content-center mb-4">
+            <p class="map-description">
+                {{ support.map_description }}
+            </p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <iframe src="{{ support.map_embed_url }}" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" class="iframe"></iframe>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var popup = document.getElementById('popup-message');
+        if (popup) {
+            popup.style.display = 'block';
+            setTimeout(function() {
+                popup.style.display = 'none';
+                popup.parentNode.removeChild(popup);
+            }, 3000);
+        }
+    });
+</script>
+{% endblock %}

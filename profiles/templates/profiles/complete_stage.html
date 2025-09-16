@@ -1,0 +1,18 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+file uploaded
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Mark Stage as Completed: {{ stage.title }}</h3>
+    <p>Upload your code/video/file as proof of completion.</p>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-success" type="submit"><span> Submit & Mark as Completed</span></button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+All Services
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/service.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<!-- Service section start -->
+<section class="service mt-5">
+    <div class="container">
+        <div class="row ezy__service23-separator">
+            <!-- Start: Section Heading -->
+            <!-- <div class="text-center">
+                {% for service_page in service_pages %}
+                <h2 class="service-title">All Services</h2>
+                <div class="container image-container">
+                    {% if  service_page.service_banner_image %}
+                    <img src="{{ service_page.service_banner_image.url }}" alt="banner image" class="img-fluid mb-3 rounded">
+                    {% else %}
+                    <img src="{% static 'assets/service.jpeg' %}" alt="banner image" class="img-fluid mb-3 rounded">
+                    {% endif %}
+                </div>
+                <p class="service-description">{{service_page.page_description}}</p>
+                {% endfor %}
+            </div> -->
+            <div class="text-center">
+            {% for service_page in service_pages %}
+            <h2 class="service-title">All Services</h2>
+
+                <!-- Full-width image container -->
+                <div class="container-fluid px-0">
+                    {% if service_page.service_banner_image %}
+                        <img src="{{ service_page.service_banner_image.url }}" alt="banner image"
+                        class="img-fluid w-100 mb-3">
+                    {% else %}
+                        <img src="{% static 'assets/service.jpeg' %}" alt="banner image"
+                        class="img-fluid w-100 mb-3">
+                    {% endif %}
+                </div>
+
+                <!-- Description inside a normal container -->
+                <div class="container">
+                    <p class="service-description">{{ service_page.page_description }}</p>
+                </div>
+            {% endfor %}
+            </div>
+
+            <!-- End: Section Heading -->
+
+            <!-- Loop through services and display them -->
+            {% for service in services %}
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4 card-i">
+                    <div class="card card-div h-100">
+                        <div class="card-body">
+                            <div class="front">
+                                {% if  service.icon %}
+                                <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" class="img-fluid mb-3 rounded">
+                                {% else %}
+                                <img src="{% static 'assets/nature1.jpeg' %}" alt="{{ service.name }}" class="img-fluid mb-3 rounded">
+                                {% endif %}
+                                <h5 class="card-title text-center">{{ service.name }}</h5>
+                                <p class="card-text">{{ service.description|safe|truncatewords:10 }}</p>
+                            </div>
+                            <div class="back-card">
+                                <a href="{% url 'service_candidates' service.id %}">
+                                    <button class="px-3"><span>Learn More</span></button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- End loop -->
+            
+        </div>
+        <!-- End: .row -->
+    </div>
+    <!-- End: .container -->
+</section>
+<!-- Service section end -->
+{% endblock %}

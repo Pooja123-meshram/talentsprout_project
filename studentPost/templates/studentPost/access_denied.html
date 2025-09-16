@@ -1,0 +1,20 @@
+<!-- blog/all_posts.html -->
+
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+    Access Denied
+{% endblock %}
+
+
+
+{% block content %}
+<section class="container mt-5">
+    <div class="alert alert-danger">
+        <h2>Access Denied</h2>
+        <p>{{ message }}</p>
+        <a href="{% url 'test' %}" class="btn btn-primary">Take the Exam</a>
+    </div>
+</section>
+{% endblock %}

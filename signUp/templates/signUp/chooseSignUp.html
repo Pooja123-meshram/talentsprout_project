@@ -1,0 +1,81 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Candidate Sign Up
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/sign_up.css' %}">
+<link rel="stylesheet" href="{% static 'css/Layout.css' %}">
+<link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
+<style>
+    .signup-option {
+        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+    }
+
+    .signup-option:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .signup-description {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #2c3e50;
+    }
+
+    .card-img-top {
+        border: 2px solid #ddd;
+        background-color: #f9f9f9;
+        padding: 3px;
+    }
+
+    .button button {
+        cursor: pointer;
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1 class="fw-bold display-5 mb-3 animate__animated animate__fadeInDown">
+        Join Our <span class="text-success">Community</span>
+    </h1>
+
+    <p class="lead">If you're looking to work on exciting opportunities, we’ve got you covered. Create your profile and get started today!</p>
+
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-6 mb-4 d-flex justify-content-center">
+            <div class="card signup-option d-flex align-items-center p-3">
+                <img src="{% static 'assets/candidate2.jpg' %}" class="card-img-top mt-3" alt="Candidate Image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50px;">
+                <div class="card-body">
+                    <h2 class="card-title">Sign Up as a Candidate</h2>
+                    <p class="card-text signup-description">
+                        Create your profile, upload your resume, and start applying for jobs that match your skills and interests. Join a network of top employers looking for talent like you.
+                    </p>
+                    <a href="{% url 'candidateSignUp' %}" class="button">
+                        <button class="px-3"><span>Sign Up as a Candidate</span></button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <p>If you already have an account! <a href="{% url 'login' %}" style="font-style: italic;">Login here</a></p>
+    </div>
+</div>
+{% endblock %}

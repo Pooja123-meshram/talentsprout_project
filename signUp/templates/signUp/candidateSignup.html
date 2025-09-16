@@ -1,0 +1,132 @@
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Requiter Registration Form
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sign_up.css' %}">
+<style>
+    .text-error {
+        color: #FF4545;
+        font-size: 0.875rem;  /* You can adjust the size as needed */
+    }
+    
+    .text-error small {
+        display: block;
+        margin-top: 0.25rem;
+    }    
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="login-form">
+        <div class="login-details">
+            <h2 class="text-center">Create an Account</h2>
+            {% comment %} <ul class="acc-page">
+                <li class="list"><a href="google"><i class="fa-brands fa-google"></i></a></li>
+                <li class="list"><a href="github"><i class="fa-brands fa-github"></i></a></li>
+                <li class="list"><a href="linkedin"><i class="fa-brands fa-linkedin-in"></i></a></li>
+            </ul>
+            <p class="text-center signup-para">or use email and phone to signUp</p> {% endcomment %}
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="login-contact">
+                    <div class="name">
+                        <div class="form-group position-relative d-flex">
+                            {{ form.first_name }}
+                            <label class="user-label" for="fname">First Name</label>
+                            {% if form.first_name.errors %}
+                                <div class="text-error small">{{ form.first_name.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group position-relative d-flex" style="margin-left: 10px;">
+                            {{ form.last_name }}
+                            <label class="user-label" for="lname" style="left: 26px;">Last Name</label>
+                            {% if form.last_name.errors %}
+                                <div class="text-error small">{{ form.last_name.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                        {{ form.phone }}
+                        <label class="user-label" for="phone">Phone</label>
+                        {% if form.phone.errors %}
+                            <div class="text-error small">{{ form.phone.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                        {{ form.email }}
+                        <label class="user-label" for="email">Email</label>
+                        {% if form.email.errors %}
+                            <div class="text-error small">{{ form.email.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                        {{ form.username }}
+                        <label class="user-label" for="username">Username</label>
+                        {% if form.username.errors %}
+                            <div class="text-error small">{{ form.username.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                        {{ form.password1 }}
+                        <label class="user-label" for="password1">Password</label>
+                        {% if form.password1.errors %}
+                            <div class="text-error small">{{ form.password1.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                        {{ form.password2 }}
+                        <label class="user-label" for="password2">Confirm Password</label>
+                        {% if form.password2.errors %}
+                            <div class="text-error small">{{ form.password2.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group form-check d-flex">
+                        <div>
+                          <input type="checkbox" class="form-check-input" id="showPasswordCheckbox">
+                        </div>
+                        <label class="form-check-label" for="showPasswordCheckbox">Show Password</label>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="px-3"><span>Sign Up</span></button>
+                    </div>
+                </div>
+            </form>
+            <div class="py-2 text-center recruiter">
+                <a href="{% url "requiterSignUp" %}" class="text-decoration-none text-black"><span>signup as a
+                        Client</span><i class="fa-solid fa-arrow-right arrow"></i></a>
+
+            </div>
+            <div class="py-2 text-center recruiter mt-2">
+                <div class="signin">Already have an account?<a href="{% url 'candidatelogin' %}" class="text-decoration-none text-black"> <span>Sign In</span><i class="fa-solid fa-arrow-right arrow"></i></a></div>
+
+            </div>
+            
+        </div>
+        <div>
+            <div class="login-img">
+                <img src="{% static 'assets/pexels-cottonbro-2773528.jpg' %}" alt="Image">
+                <div class="personal-info">
+                    <h4>Hello Friends</h4>
+                    <p>Enter your personal details and <br>
+                    <div class="text-center detail">start a journey with us!</div>
+                    </p>
+                    <div class="text-center mt-4">
+                        <a href="{% url "login" %}"> <button class="px-3"><span>Log In</span></button></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

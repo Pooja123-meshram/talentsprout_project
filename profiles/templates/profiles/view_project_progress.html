@@ -1,0 +1,83 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+View Progress
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Progress for: {{ project.project_name }}</h3>
+
+    {% if stages %}
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered align-middle text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Candidate Status</th>
+                    <th>Recruiter Confirmation</th>
+                    <th>Proof</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stage in stages %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><strong>{{ stage.title }}</strong></td>
+                    <td>{{ stage.description }}</td>
+
+                    <!-- Candidate Status -->
+                    <td>
+                        {% if stage.is_completed %}
+                            <span class="badge bg-success">Completed</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Recruiter Confirmation -->
+                    <td>
+                        {% if stage.confirmed_by_recruiter %}
+                            <span class="badge bg-primary">Confirmed</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Not Confirmed</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Proof File -->
+                    <td>
+                        {% if stage.proof_file %}
+                            <a href="{{ stage.proof_file.url }}" target="_blank" class="btn btn-sm btn-outline-success">Download</a>
+                        {% else %}
+                            <span class="text-muted">No File</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Action Buttons -->
+                    <td>
+                        {% if request.user == project.candidate and not stage.is_completed %}
+                            <a href="{% url 'mark_stage_completed' stage.id %}" class="btn btn-sm btn-outline-success mb-1">Upload & Complete</a>
+                        {% endif %}
+
+                        {% if request.user == project.recruiter and stage.is_completed and not stage.confirmed_by_recruiter %}
+                            <a href="{% url 'confirm_stage_completion_view' stage.id %}" class="btn btn-sm btn-outline-primary">Confirm</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted mt-4">No progress stages yet.</p>
+    {% endif %}
+</div>
+<!-- <div class="mt-4">
+    <a href="{% url 'profiles' %}" class="btn btn-secondary">← Back</a>
+</div> -->
+
+{% endblock %}

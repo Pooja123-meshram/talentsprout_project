@@ -1,0 +1,16 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+add progress
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h3>Add Progress Stage to: {{ project.project_name }}</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary"><span> Add Stage</span></button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "admin_customization/Index.html" %}
+{% load static %}
+{% block title %}Client Overview{% endblock %}
+{% block admin_content %}
+
+<div class="container-fluid py-4 px-5">
+
+    <h2 class="mb-4 fw-bold text-dark">🧑‍💼 Client Overview Dashboard</h2>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-start border-4 border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Clients</h6>
+                    <h3 class="fw-bold text-primary">{{ total_clients }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-start border-4 border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">Clients with Projects</h6>
+                    <h3 class="fw-bold text-success">{{ clients_with_projects }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-start border-4 border-warning">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Payments</h6>
+                    <h3 class="fw-bold text-warning">₹ {{ client_total_payments }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📈 Monthly Signup Analytics -->
+    <div class="card mb-5 shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0 fw-semibold">📊 Monthly Signups – {{ now.year }}</h5>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                {% for month, count in month_data %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ month }}
+                        <span class="badge bg-secondary rounded-pill">{{ count }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- 📋 Client Details Table -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="fw-semibold mb-0">📄 Client Details</h5>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>No</th>
+                        <th>Recruiter</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Total Projects</th>
+                        <th>Total Payments (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recruiter in recruiter_data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ recruiter.username }}</td>
+                            <td>{{ recruiter.email }}</td>
+                            <td>{{ recruiter.phone }}</td>
+                            <td>{{ recruiter.project_count }}</td>
+                            <td>{{ recruiter.total_paid|default:"0.00" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No recruiters found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

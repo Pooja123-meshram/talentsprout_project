@@ -1,0 +1,128 @@
+.service {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.service-title {
+ font-weight: bold;
+ margin-bottom: 2rem;
+ text-align: left;
+ margin-left: 13px;
+}
+.service-description {
+ text-align: left;
+ margin-left: 13px;
+ margin-bottom: 3rem;
+ font-size: 1.1rem;
+ margin-top: 10px;
+}
+.blog-title {
+ font-weight: bold;
+ margin-bottom: 2rem;
+}
+.cards {
+ transition: 400ms;
+ border: none;
+}
+.card-i{
+ display: flex;
+ justify-content: center;
+}
+.cards:hover {
+ transform: scale(1.06);
+}
+.card-img-top {
+ height: 200px;
+ object-fit: cover;
+ border-radius: 20px;
+}
+.blog-section {
+ margin-top: 4rem;
+}
+.l-img,
+.r-img {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+.l-img img,
+.r-img img {
+ height: 650px;
+ width: 400px;
+ object-fit: cover;
+}
+.image-container img {
+ border-radius: 10px;
+ height: 350px;
+ width: 100%;
+ object-fit: cover;
+}
+.detailed {
+ display: flex;
+ justify-content: space-between;
+}
+.detail {
+ display: flex;
+ gap: 4px;
+ align-items: center;
+}
+.detail img {
+ height: 50px;
+ width: 50px;
+ border-radius: 50%;
+ object-fit: cover;
+}
+.images-img {
+ display: flex;
+ gap: 10px;
+ align-items: center;
+}
+.card-div {
+ perspective: 1000px;
+ position: relative;
+ border: none;
+ width: 280px;
+   height: auto;
+   padding: 16px;
+ text-align: center;
+ margin: 16px 0;
+ text-align: center;
+}
+.card-div {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.card-div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-div .card-body {
+  text-align: center;
+}
+
+.card-div img {
+  width: 80px;         /* All images same size */
+  height: 80px;
+  object-fit: contain; /* Keeps aspect ratio */
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+.card-div .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.card-div .card-text {
+  font-size: 0.95rem;
+  color: #444;
+}
+
