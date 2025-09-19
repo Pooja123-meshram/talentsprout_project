@@ -203,10 +203,11 @@ EMAIL_HOST = 'smtp.gmail.com'  # SMTP server for gmail
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'talentsprout8@gmail.com'
-EMAIL_HOST_PASSWORD = 'kucv izka arku hgqn'
+EMAIL_HOST_PASSWORD = 'guru nlsg bvck rjrf'
 DEFAULT_FROM_EMAIL = 'talentsprout8@gmail.com'
 
 # EMAIL_HOST_PASSWORD = 'nzym mzyj rdll tyyu'
+#kucv izka arku hgqn
 
 
 
